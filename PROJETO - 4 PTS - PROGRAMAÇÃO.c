@@ -54,7 +54,7 @@ typedef struct{
    char hora_saida[20];
    float preco_venda;
    float subtotal;
-   int cpf[MAX_CPF];
+   char cpf[MAX_CPF];
    char nome_cliente[20];
    char nome_funcionario[MAX_NOMES_FUNCIONARIOS];
 
@@ -294,7 +294,7 @@ void emitirNotas(){
     }
     for (int i = 0; i < total_notas; i++) {
         printf("\nNOTA FISCAL %d:\n", i + 1);
-        printf("\Número da nota: %d", nota[i].numero_nota);
+        printf("\nNúmero da nota: %d", nota[i].numero_nota);
         printf("ID: %d\n", nota[i].id);
         printf("Nome: %s\n", nota[i].nome);
         printf("Hora da venda: %s\n", nota[i].hora_saida);
