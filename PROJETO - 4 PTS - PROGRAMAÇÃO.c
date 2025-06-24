@@ -59,7 +59,6 @@ int total_produtos = 0;
 venda nota[MAX_NOTAS];
 int total_notas = 0;
 
-
 void gravarArquivo() {
     FILE *arquivo;
     char registro1[100], registro2[100];
@@ -141,8 +140,6 @@ void adicionarAoArquivo() {
     printf("Dados adicionados com sucesso!\n");
 }
 
-
-
 int verificarLogin() {
     setlocale(LC_ALL, "portuguese");
     char matricula[20];
@@ -163,7 +160,6 @@ int verificarLogin() {
         fgets(senha, sizeof(senha), stdin);
         senha[strcspn(senha, "\n")] = 0;
 
-
         if ((strcmp(matricula, MATRICULA_ADMIN) == 0 && strcmp(senha, SENHA_ADMIN) == 0)) {
             printf("\nLogin realizado com sucesso!\n");
             return 1;
@@ -180,26 +176,30 @@ int verificarLogin() {
     return 0;
 }
 
-
-
 void cadastrarProdutos() {
     chegada p;
     printf("\n==== CHEGADA DOS PRODUTOS ====\n");
+
     printf("ID do produto: ");
     scanf("%d", &p.id);
     getchar();
+
     printf("Nome: ");
-    scanf("%[^\n]", p.nome);
-    getchar();
+    fgets(p.nome, sizeof(p.nome), stdin);
+    p.nome[strcspn(p.nome, "\n")] = 0;
+
     printf("Descrição: ");
-    scanf("%[^\n]", p.descricao);
-    getchar();
+    fgets(p.descricao, sizeof(p.descricao), stdin);
+    p.descricao[strcspn(p.descricao, "\n")] = 0;
+
     printf("Preço unitário: R$ ");
     scanf("%f", &p.preco);
     getchar();
+
     printf("Nome do funcionário que cadastrou: ");
-    scanf("%[^\n]", p.nome_funcionario);
-    getchar();
+    fgets(p.nome_funcionario, sizeof(p.nome_funcionario), stdin);
+    p.nome_funcionario[strcspn(p.nome_funcionario, "\n")] = 0;
+
     printf("Produto cadastrado com sucesso!\n");
 }
 
@@ -210,24 +210,31 @@ void entradaEstoque() {
     }
     entrada_estoque p;
     printf("\n==== CADASTRO NO ESTOQUE ====\n");
+
     printf("ID: ");
     scanf("%d", &p.id);
     getchar();
+
     printf("Nome: ");
-    scanf("%[^\n]", p.nome);
-    getchar();
+    fgets(p.nome, sizeof(p.nome), stdin);
+    p.nome[strcspn(p.nome, "\n")] = 0;
+
     printf("Hora do cadastro: ");
-    scanf("%[^\n]", p.hora);
-    getchar();
+    fgets(p.hora, sizeof(p.hora), stdin);
+    p.hora[strcspn(p.hora, "\n")] = 0;
+
     printf("Data do cadastro: ");
-    scanf("%[^\n]", p.data);
-    getchar();
+    fgets(p.data, sizeof(p.data), stdin);
+    p.data[strcspn(p.data, "\n")] = 0;
+
     printf("Quantidade: ");
     scanf("%d", &p.qnt_produto);
     getchar();
+
     printf("Preço pago: R$ ");
     scanf("%f", &p.preco_entrada);
     getchar();
+
     estoque[total_produtos] = p;
     total_produtos++;
     printf("Produto cadastrado no estoque com sucesso!\n");
@@ -236,6 +243,7 @@ void entradaEstoque() {
 void atualizarProduto() {
     int id, encontrado = 0;
     printf("\n==== ATUALIZAR PRODUTO ====\n");
+
     printf("Digite o ID do produto: ");
     scanf("%d", &id);
     getchar();
@@ -243,21 +251,27 @@ void atualizarProduto() {
     for (int i = 0; i < total_produtos; i++) {
         if (estoque[i].id == id) {
             printf("Produto encontrado. Informe os novos dados:\n");
+
             printf("Novo nome: ");
-            scanf("%[^\n]", estoque[i].nome);
-            getchar();
+            fgets(estoque[i].nome, sizeof(estoque[i].nome), stdin);
+            estoque[i].nome[strcspn(estoque[i].nome, "\n")] = 0;
+
             printf("Nova hora: ");
-            scanf("%[^\n]", estoque[i].hora);
-            getchar();
+            fgets(estoque[i].hora, sizeof(estoque[i].hora), stdin);
+            estoque[i].hora[strcspn(estoque[i].hora, "\n")] = 0;
+
             printf("Nova data: ");
-            scanf("%[^\n]", estoque[i].data);
-            getchar();
+            fgets(estoque[i].data, sizeof(estoque[i].data), stdin);
+            estoque[i].data[strcspn(estoque[i].data, "\n")] = 0;
+
             printf("Nova quantidade: ");
             scanf("%d", &estoque[i].qnt_produto);
             getchar();
+
             printf("Novo preço pago: R$ ");
             scanf("%f", &estoque[i].preco_entrada);
             getchar();
+
             printf("Produto atualizado com sucesso!\n");
             encontrado = 1;
             break;
@@ -271,6 +285,7 @@ void atualizarProduto() {
 void removerProduto() {
     int id, encontrado = 0;
     printf("\n==== REMOVER PRODUTO ====\n");
+
     printf("Digite o ID do produto: ");
     scanf("%d", &id);
     getchar();
@@ -295,9 +310,9 @@ void buscarProdutoPorNome() {
     char nomeBusca[50];
     int encontrado = 0;
     printf("\n==== BUSCAR PRODUTO POR NOME ====\n");
-    printf("Digite o nome do produto: ");
-    scanf("%[^\n]", nomeBusca);
-    getchar();
+
+    fgets(nomeBusca, sizeof(nomeBusca), stdin);
+    nomeBusca[strcspn(nomeBusca, "\n")] = 0;
 
     for (int i = 0; i < total_produtos; i++) {
         if (strstr(estoque[i].nome, nomeBusca) != NULL) {
@@ -316,85 +331,84 @@ void buscarProdutoPorNome() {
     }
 }
 
-void ConsultaProdutos() {
-    printf("\n===== PRODUTOS NO ESTOQUE =====\n");
-    if (total_produtos == 0) {
-        printf("Nenhum produto cadastrado.\n");
-        return;
-    }
-    for (int i = 0; i < total_produtos; i++) {
-        printf("\nProduto %d:\n", i + 1);
-        printf("ID: %d\n", estoque[i].id);
-        printf("Nome: %s\n", estoque[i].nome);
-        printf("Hora: %s\n", estoque[i].hora);
-        printf("Data: %s\n", estoque[i].data);
-        printf("Quantidade: %d\n", estoque[i].qnt_produto);
-        printf("Preço pago: R$ %.2f\n", estoque[i].preco_entrada);
-    }
-}
-
-
-
-void cadastroClietes() {
+void CadastroCleintes() {
     clientes p;
     printf("\n==== CADASTRO DE CLIENTE ====\n");
+
     printf("Nome do cliente: ");
-    scanf("%[^\n]", p.nome);
-    getchar();
+    fgets(p.nome, sizeof(p.nome), stdin);
+    p.nome[strcspn(p.nome, "\n")] = 0;
+
     printf("CPF: ");
-    scanf("%[^\n]", p.cpf);
-    getchar();
+    fgets(p.cpf, sizeof(p.cpf), stdin);
+    p.cpf[strcspn(p.cpf, "\n")] = 0;
+
     printf("Email: ");
-    scanf("%[^\n]", p.email);
-    getchar();
+    fgets(p.email, sizeof(p.email), stdin);
+    p.email[strcspn(p.email, "\n")] = 0;
+
     printf("Telefone: ");
-    scanf("%[^\n]", p.telefone);
-    getchar();
+    fgets(p.telefone, sizeof(p.telefone), stdin);
+    p.telefone[strcspn(p.telefone, "\n")] = 0;
+
     printf("Endereço: ");
-    scanf("%[^\n]", p.endereco);
-    getchar();
+    fgets(p.endereco, sizeof(p.endereco), stdin);
+    p.endereco[strcspn(p.endereco, "\n")] = 0;
+
     printf("ID do cliente: ");
     scanf("%d", &p.id_cliente);
     getchar();
+
     printf("Cliente cadastrado com sucesso!\n");
 }
 
 void vendaProdutos() {
     venda p;
     printf("\n==== VENDA ====\n");
+
     printf("Número da nota: ");
     scanf("%d", &p.numero_nota);
     getchar();
+
     printf("ID do produto: ");
     scanf("%d", &p.id);
     getchar();
+
     printf("Nome do produto: ");
-    scanf("%[^\n]", p.nome);
-    getchar();
+    fgets(p.nome, sizeof(p.nome), stdin);
+    p.nome[strcspn(p.nome, "\n")] = 0;
+
     printf("Quantidade: ");
     scanf("%d", &p.qnt_produto_saida);
     getchar();
+
     printf("Hora da venda: ");
-    scanf("%[^\n]", p.hora_saida);
-    getchar();
+    fgets(p.hora_saida, sizeof(p.hora_saida), stdin);
+    p.hora_saida[strcspn(p.hora_saida, "\n")] = 0;
+
     printf("Data da venda: ");
-    scanf("%[^\n]", p.data_saida);
-    getchar();
+    fgets(p.data_saida, sizeof(p.data_saida), stdin);
+    p.data_saida[strcspn(p.data_saida, "\n")] = 0;
+
     printf("Preço de venda por unidade: R$ ");
     scanf("%f", &p.preco_venda);
     getchar();
+
     printf("Nome do comprador: ");
-    scanf("%[^\n]", p.nome_cliente);
-    getchar();
+    fgets(p.nome_cliente, sizeof(p.nome_cliente), stdin);
+    p.nome_cliente[strcspn(p.nome_cliente, "\n")] = 0;
+
     printf("CPF do comprador: ");
-    scanf("%[^\n]", p.cpf);
-    getchar();
+    fgets(p.cpf, sizeof(p.cpf), stdin);
+    p.cpf[strcspn(p.cpf, "\n")] = 0;
+
     printf("Funcionário que realizou a venda: ");
-    scanf("%[^\n]", p.nome_funcionario);
-    getchar();
+    fgets(p.nome_funcionario, sizeof(p.nome_funcionario), stdin);
+    p.nome_funcionario[strcspn(p.nome_funcionario, "\n")] = 0;
 
     p.subtotal = p.qnt_produto_saida * p.preco_venda;
     printf("Valor total da venda: R$ %.2f\n", p.subtotal);
+
     nota[total_notas] = p;
     total_notas++;
     printf("Nota fiscal gerada e salva com sucesso!\n");
@@ -445,17 +459,16 @@ void relatorioDeVendas() {
 
     printf("\nTOTAL GERAL DAS VENDAS: R$ %.2f\n", totalGeral);
 }
+void ConsultaProdutos();
 
 void sobre() {
     printf("\n==== SOBRE O SISTEMA ====\n");
     printf("Sistema de Gestão - BKEP Materiais de Construção\n");
     printf("Versão: 1.0\n");
-    printf("Desenvolvido por:Breno, Enzo, Kaique e Pedro Augusto\n");
+    printf("Desenvolvido por: Breno, Enzo, Kaique e Pedro Augusto\n");
     printf("Funções: Controle de estoque, clientes, vendas e notas fiscais.\n");
     printf("Ano: 2025\n");
 }
-
-
 
 int main() {
     if (!verificarLogin()) {
@@ -489,7 +502,7 @@ int main() {
             case 1: cadastrarProdutos(); break;
             case 2: entradaEstoque(); break;
             case 3: ConsultaProdutos(); break;
-            case 4: cadastroClietes(); break;
+            case 4: CadastroCleintes(); break;
             case 5: vendaProdutos(); break;
             case 6: emitirNotas(); break;
             case 7: gravarArquivo(); break;
@@ -501,9 +514,30 @@ int main() {
             case 13: consultarClientes(); break;
             case 14: relatorioDeVendas(); break;
             case 15: sobre(); break;
-            case 16: printf("Encerrando o programa...\n"); return 0;
-            default: printf("Opção inválida. Tente novamente.\n"); break;
+            case 16:
+                printf("Saindo...\n");
+                return 0;
+            default:
+                printf("Opção inválida. Tente novamente.\n");
         }
     }
     return 0;
+}
+
+// Função ConsultaProdutos que faltava no código, adaptei para exibir estoque
+void ConsultaProdutos() {
+    printf("\n==== PRODUTOS NO ESTOQUE ====\n");
+    if (total_produtos == 0) {
+        printf("Nenhum produto cadastrado.\n");
+        return;
+    }
+    for (int i = 0; i < total_produtos; i++) {
+        printf("\nProduto %d:\n", i + 1);
+        printf("ID: %d\n", estoque[i].id);
+        printf("Nome: %s\n", estoque[i].nome);
+        printf("Data: %s\n", estoque[i].data);
+        printf("Hora: %s\n", estoque[i].hora);
+        printf("Quantidade: %d\n", estoque[i].qnt_produto);
+        printf("Preço pago: R$ %.2f\n", estoque[i].preco_entrada);
+    }
 }
